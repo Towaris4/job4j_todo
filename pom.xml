@@ -59,6 +59,14 @@
             <version>42.2.9</version>
         </dependency>
 
+        <!-- Используем javax.servlet вместо jakarta.servlet для совместимости с Spring Boot 2.7 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- H2 для тестов (доступен в тестах приложения) -->
         <dependency>
             <groupId>com.h2database</groupId>

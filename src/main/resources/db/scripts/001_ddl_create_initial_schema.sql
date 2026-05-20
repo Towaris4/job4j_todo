@@ -1,6 +1,13 @@
-CREATE TABLE tasks (
-                       id SERIAL PRIMARY KEY,
-                       description TEXT,
-                       created TIMESTAMP,
-                       done BOOLEAN
+CREATE TABLE IF NOT EXISTS todo_user (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    login VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tasks (
+    id SERIAL PRIMARY KEY,
+    description TEXT,
+    created TIMESTAMP,
+    done BOOLEAN
 );
