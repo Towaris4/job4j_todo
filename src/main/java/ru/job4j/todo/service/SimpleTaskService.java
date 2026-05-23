@@ -18,18 +18,18 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public Task create(Task task) {
+    public Optional<Task> create(Task task) {
         return taskRepository.create(task);
     }
 
     @Override
-    public void update(Task task) {
-        taskRepository.update(task);
+    public boolean update(Task task) {
+        return taskRepository.update(task);
     }
 
     @Override
-    public void delete(Integer id) {
-        taskRepository.delete(id);
+    public boolean delete(Integer id) {
+        return taskRepository.delete(id);
     }
 
     @Override
@@ -50,5 +50,21 @@ public class SimpleTaskService implements TaskService {
     @Override
     public List<Task> findByDone(Boolean done) {
         return taskRepository.findByDone(done);
+    }
+
+    @Override
+    public boolean updateDone(Task task) {
+        return taskRepository.updateDone(task);
+    }
+
+    @Override
+    public List<Task> findFiltered(String filter) {
+        if ("done".equalsIgnoreCase(filter)) {
+            return findByDone(true);
+        }
+        if ("new".equalsIgnoreCase(filter)) {
+            return findByDone(false);
+        }
+        return findAll();
     }
 }

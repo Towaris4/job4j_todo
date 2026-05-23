@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface TaskRepository {
 
-    Task create(Task task);
+    Optional<Task> create(Task task);
 
-    void update(Task task);
+    boolean update(Task task);
 
-    void delete(Integer taskId);
+    boolean delete(Integer taskId);
 
     List<Task> findAllOrderById();
 
@@ -20,4 +20,8 @@ public interface TaskRepository {
     List<Task> findByDescriptionLike(String key);
 
     List<Task> findByDone(Boolean done);
+
+    boolean updateDone(Task task);
+
+    List<Task> findFiltered(String filter);
 }

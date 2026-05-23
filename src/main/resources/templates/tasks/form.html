@@ -8,13 +8,18 @@
 <h1 th:text="${task.id == null} ? 'Добавить задание' : 'Редактировать задание'"></h1>
 
 <!-- Форма отправляет на create или update в зависимости от наличия id -->
-<form th:action="${task.id == null} ? @{/tasks/create} : @{/tasks/update}" method="post" th:object="${task}">
-    <input type="hidden" th:field="*{id}" />
+<form method="post" th:action="${task.id == null} ? @{/tasks/create} : @{/tasks/update}" th:object="${task}">
+    <input th:field="*{id}" type="hidden"/>
+    <div class="mb-3">
+        <label class="form-label">Тема</label>
+        <input class="form-control" required th:field="*{title}" type="text"/>
+    </div>
     <div class="mb-3">
         <label class="form-label">Описание</label>
-        <input type="text" class="form-control" th:field="*{description}" required />
+        <textarea class="form-control" required th:field="*{description}" rows="5" cols="50"></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Сохранить</button>
-    <a th:href="${task.id == null} ? @{/tasks} : @{/tasks/{id}(id=${task.id})}" class="btn btn-secondary ms-2">Отмена</a>
+    <button class="btn btn-primary" type="submit">Сохранить</button>
+    <a class="btn btn-secondary ms-2"
+       th:href="${task.id == null} ? @{/tasks} : @{/tasks/{id}(id=${task.id})}">Отмена</a>
 </form>
 </body>

@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.service.TaskService;
+
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/tasks")
@@ -18,16 +20,8 @@ public class TaskController {
     // 1. Страница со списком + фильтрация
     @GetMapping
     public String getAllTasks(@RequestParam(required = false) String filter, Model model) {
-        if (filter == null || filter.equals("all")) {
-            model.addAttribute("tasks", taskService.findAll());
-        } else if (filter.equals("done")) {
-            model.addAttribute("tasks", taskService.findByDone(true));
-        } else if (filter.equals("new")) {
-            model.addAttribute("tasks", taskService.findByDone(false));
-        } else {
-            model.addAttribute("tasks", taskService.findAll());
-        }
-        model.addAttribute("filter", filter); // для подсветки активной ссылки
+        model.addAttribute("tasks", taskService.findFiltered(filter));
+        model.addAttribute("filter", filter);
         return "tasks/list";
     }
 
@@ -40,18 +34,26 @@ public class TaskController {
 
     // Обработка создания
     @PostMapping("/create")
-    public String createTask(@ModelAttribute Task task) {
+    public String createTask(@ModelAttribute Task task, Model model) {
         task.setCreated(LocalDateTime.now());
-        task.setDone(false);
-        taskService.create(task);
+        Optional<Task> optional = taskService.create(task);
+        if (optional.isEmpty()) {
+            model.addAttribute("task", task);
+            model.addAttribute("message", "Ошибка при создании задачи.");
+            return "errors/404";
+        }
         return "redirect:/tasks";
     }
 
     // 4. Детальная страница
     @GetMapping("/{id}")
     public String getDetails(@PathVariable Integer id, Model model) {
-        Task task = taskService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Задача не найдена"));
+        Optional<Task> optional = taskService.findById(id);
+        if (optional.isEmpty()) {
+            model.addAttribute("message", "Задача не найдена");
+            return "errors/404";
+        }
+        Task task = optional.get();
         model.addAttribute("task", task);
         return "tasks/details";
     }
@@ -59,33 +61,46 @@ public class TaskController {
     // 7. Форма редактирования
     @GetMapping("/{id}/edit")
     public String getEditForm(@PathVariable Integer id, Model model) {
-        Task task = taskService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Задача не найдена"));
+        Optional<Task> optional = taskService.findById(id);
+        if (optional.isEmpty()) {
+            model.addAttribute("message", "Задача не найдена");
+            return "errors/404";
+        }
+        Task task = optional.get();
         model.addAttribute("task", task);
         return "tasks/form";
     }
 
     // Обработка обновления
     @PostMapping("/update")
-    public String updateTask(@ModelAttribute Task task) {
-        taskService.update(task);
+    public String updateTask(@ModelAttribute Task task, Model model) {
+        if (!taskService.update(task)) {
+            model.addAttribute("task", task);
+            model.addAttribute("message", "Задача не найдена");
+            return "errors/404";
+        }
         return "redirect:/tasks/" + task.getId();
     }
 
     // 6. Перевод в состояние "Выполнено"
     @PostMapping("/{id}/done")
-    public String markAsDone(@PathVariable Integer id) {
-        Task task = taskService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Задача не найдена"));
-        task.setDone(true);
-        taskService.update(task);
+    public String markAsDone(Model model, @PathVariable Integer id) {
+        Optional<Task> optional = taskService.findById(id);
+        if (optional.isEmpty()) {
+            model.addAttribute("message", "Задача не найдена");
+            return "errors/404";
+        }
+        Task task = optional.get();
+        taskService.updateDone(task);
         return "redirect:/tasks/" + id;
     }
 
     // 8. Удаление
     @PostMapping("/{id}/delete")
-    public String deleteTask(@PathVariable Integer id) {
-        taskService.delete(id);
+    public String deleteTask(@PathVariable Integer id, Model model) {
+        if (taskService.delete(id)) {
+            model.addAttribute("message", "Не удалось обновить задачу");
+        }
         return "redirect:/tasks";
     }
 }
