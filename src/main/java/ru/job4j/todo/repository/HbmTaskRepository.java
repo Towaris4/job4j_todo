@@ -20,7 +20,7 @@ public class HbmTaskRepository implements TaskRepository {
 
     /**
      * Централизованная обработка сессии, транзакции и исключений.
-     * Логгирует ошибку, откатывает транзакцию и пробрасывает RuntimeException дальше.
+     * Логгирует ошибку, откатывает транзакцию.
      */
     private <T> T tx(Function<Session, T> command) {
         Session session = sf.openSession();
@@ -32,7 +32,7 @@ public class HbmTaskRepository implements TaskRepository {
         } catch (Exception e) {
             session.getTransaction().rollback();
             LOG.error("Ошибка выполнения операции в БД", e);
-            throw new RuntimeException("Ошибка работы с базой данных", e);
+            throw e;
         } finally {
             session.close();
         }
