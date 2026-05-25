@@ -61,7 +61,7 @@ public class HbmTaskRepository implements TaskRepository {
     public boolean updateDone(Task task) {
         return tx(session -> session.createQuery(
                         "UPDATE Task SET done = :fDone WHERE id = :fId")
-                .setParameter("fDone", task.isDone()) // ⚠️ Было: task.setDone(true) захардкожено
+                .setParameter("fDone", true)
                 .setParameter("fId", task.getId())
                 .executeUpdate() > 0);
     }

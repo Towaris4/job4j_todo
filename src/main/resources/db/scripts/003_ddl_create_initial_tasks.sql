@@ -1,4 +1,3 @@
-BEGIN;
 CREATE TABLE IF NOT EXISTS tasks (
     id SERIAL PRIMARY KEY,
     title text,
@@ -6,4 +5,4 @@ CREATE TABLE IF NOT EXISTS tasks (
     created TIMESTAMP,
     done BOOLEAN
 );
-COMMIT;
+rollback DROP tasks;

@@ -28,7 +28,7 @@ public class UserController {
         var savedUser = userService.save(user);
         if (savedUser.isEmpty()) {
             model.addAttribute("message", "Ошибка логин должен быть уникальным.");
-            return "errors/404";
+            return "users/register";
         }
         return "redirect:/tasks";
     }
