@@ -5,4 +5,3 @@ CREATE TABLE IF NOT EXISTS tasks (
     created TIMESTAMP,
     done BOOLEAN
 );
-rollback DROP tasks;

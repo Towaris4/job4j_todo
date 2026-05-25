@@ -4,4 +4,3 @@ CREATE TABLE IF NOT EXISTS todo_user (
     login VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL
 );
-rollback DROP todo_user;

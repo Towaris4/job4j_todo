@@ -24,6 +24,9 @@ public class Task {
 
     private String title;
     private String description;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     private LocalDateTime created;
     private boolean done;
 }
