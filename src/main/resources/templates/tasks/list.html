@@ -24,6 +24,7 @@
         <th>ID</th>
         <th>Тема</th>
         <th>Пользователь</th>
+        <th>Приоритет</th>
         <th>Дата создания</th>
         <th>Состояние</th>
     </tr>
@@ -36,6 +37,7 @@
         <td th:text="${task.id}"></td>
         <td th:text="${task.title}"></td>
         <td th:text="${task.user?.getName()}"></td>
+        <td th:text="${task.getPriority()?.getName()}"></td>
         <td th:text="${#temporals.format(task.created, 'dd.MM.yyyy HH:mm')}"></td>
         <td th:text="${task.done} ? '✅ Выполнено' : '🆕 Новое'"></td>
 
