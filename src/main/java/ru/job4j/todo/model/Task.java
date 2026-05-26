@@ -29,4 +29,7 @@ public class Task {
     private User user;
     private LocalDateTime created;
     private boolean done;
+    @ManyToOne
+    @JoinColumn(name = "priority_id")
+    private Priority priority;
 }
