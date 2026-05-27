@@ -49,10 +49,11 @@ public class HbmTaskRepository implements TaskRepository {
     @Override
     public boolean update(Task task) {
         return tx(session -> session.createQuery(
-                        "UPDATE Task SET title = :fTitle, description = :fDescription, done = :fDone WHERE id = :fId")
+                        "UPDATE Task SET title = :fTitle, description = :fDescription, priority = :fPriority, done = :fDone WHERE id = :fId")
                 .setParameter("fTitle", task.getTitle())
                 .setParameter("fDescription", task.getDescription())
                 .setParameter("fDone", task.isDone())
+                .setParameter("fPriority", task.getPriority())
                 .setParameter("fId", task.getId())
                 .executeUpdate() > 0);
     }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,8 @@ import java.util.Optional;
 public class TaskController {
 
     private final TaskService taskService;
+    private final PriorityService priorityService;
+
 
     // 1. Страница со списком + фильтрация
     @GetMapping
@@ -29,6 +32,7 @@ public class TaskController {
     @GetMapping("/create")
     public String getCreateForm(Model model) {
         model.addAttribute("task", new Task());
+        model.addAttribute("priorities", priorityService.findAll());
         return "tasks/form";
     }
 
@@ -67,6 +71,7 @@ public class TaskController {
             return "errors/404";
         }
         Task task = optional.get();
+        model.addAttribute("priorities", priorityService.findAll());
         model.addAttribute("task", task);
         return "tasks/form";
     }

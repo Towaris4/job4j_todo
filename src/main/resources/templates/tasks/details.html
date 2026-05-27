@@ -8,6 +8,7 @@
 <h1>Детали задачи #<span th:text="${task.id}"></span></h1>
 <div class="card p-4 mt-3">
     <p><strong>Тема:</strong> <span th:text="${task.title}"></span></p>
+    <p><strong>Приоритет:</strong> <span th:text="${task.priority.getName()}"></span></p>
     <p><strong>Описание:</strong> <span th:text="${task.description}"></span></p>
     <p><strong>Создана:</strong> <span th:text="${#temporals.format(task.created, 'dd.MM.yyyy HH:mm')}"></span></p>
     <p><strong>Статус:</strong> <span class="fw-bold" th:text="${task.done} ? 'Выполнено' : 'В работе'"></span></p>

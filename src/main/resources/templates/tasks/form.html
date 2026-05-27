@@ -15,6 +15,16 @@
         <input class="form-control" required th:field="*{title}" type="text"/>
     </div>
     <div class="mb-3">
+        <label for="priority" class="form-label">Приоритет</label>
+        <select class="form-select" id="priority" th:field="*{priority.id}">
+            <option value="" disabled>Выберите приоритет</option>
+            <option th:each="priority : ${priorities}"
+                    th:value="${priority.id}"
+                    th:text="${priority.name}">
+            </option>
+        </select>
+    </div>
+    <div class="mb-3">
         <label class="form-label">Описание</label>
         <textarea class="form-control" required th:field="*{description}" rows="5" cols="50"></textarea>
     </div>
