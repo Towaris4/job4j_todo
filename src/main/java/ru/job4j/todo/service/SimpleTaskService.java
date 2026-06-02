@@ -67,4 +67,14 @@ public class SimpleTaskService implements TaskService {
         }
         return findAll();
     }
+
+    @Override
+    public List<Task> findAllWithCategories() {
+        return taskRepository.findAllWithCategories();
+    }
+
+    @Override
+    public List<Task> findAllWithRelations() {
+        return taskRepository.findAllWithRelations();
+    }
 }

@@ -24,19 +24,31 @@
         <th>ID</th>
         <th>Тема</th>
         <th>Пользователь</th>
+        <th>Категории</th>
         <th>Приоритет</th>
         <th>Дата создания</th>
         <th>Состояние</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="task : ${tasks}"
-        th:onclick="|window.location.href='@{/tasks/{id}(id=${task.id})}'|"
+    <tr th:each="task : ${tasks}" th:if="${task != null}"
+        th:data-url="@{/tasks/{id}(id=${task.id})}"
+        onclick="window.location.href=this.dataset.url"
         style="cursor: pointer;">
-
         <td th:text="${task.id}"></td>
         <td th:text="${task.title}"></td>
-        <td th:text="${task.user?.getName()}"></td>
+        <td th:text="${task.user?.name} ?: 'Не задано'"></td>
+        <td>
+        <!-- 1. Цикл: если есть категории, создаём бейдж для каждой -->
+        <span th:each="cat : ${task.categories}"
+              th:text="${cat.name}"
+              class="badge bg-primary me-1 mb-1"></span>
+
+        <!-- 2. Пустое состояние: если список пуст, показываем текст -->
+        <span th:if="${#lists.isEmpty(task.categories)}" class="text-muted fst-italic">
+        Категории не выбраны
+        </span>
+        </td>
         <td th:text="${task.getPriority()?.getName()}"></td>
         <td th:text="${#temporals.format(task.created, 'dd.MM.yyyy HH:mm')}"></td>
         <td th:text="${task.done} ? '✅ Выполнено' : '🆕 Новое'"></td>

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface PriorityService {
     List<Priority> findAll();
+
+    Priority findById(Integer id);
 }

@@ -15,14 +15,24 @@
         <input class="form-control" required th:field="*{title}" type="text"/>
     </div>
     <div class="mb-3">
-        <label for="priority" class="form-label">Приоритет</label>
-        <select class="form-select" id="priority" th:field="*{priority.id}">
+        <label for="priorityIds" class="form-label">Приоритет</label>
+        <select class="form-select" id="priorityIds" name="priorityIds">
             <option value="" disabled>Выберите приоритет</option>
             <option th:each="priority : ${priorities}"
                     th:value="${priority.id}"
                     th:text="${priority.name}">
             </option>
         </select>
+    </div>
+    <div class="mb-3">
+        <label for="categoryIds" class="form-label">Категории</label>
+        <select multiple class="form-select" id="categoryIds" name="categoryIds" size="5">
+            <option th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:text="${category.name}">
+            </option>
+        </select>
+        <div class="form-text">Удерживайте Ctrl (Cmd на Mac) для выбора нескольких значений</div>
     </div>
     <div class="mb-3">
         <label class="form-label">Описание</label>

@@ -6,15 +6,18 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Priority;
+import ru.job4j.todo.model.Task;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Repository
 @AllArgsConstructor
-public class HbmPriorityRepository implements PriorityRepository {
-    private static final Logger LOG = LoggerFactory.getLogger(HbmPriorityRepository.class);
+public class HbmCategoryRepository implements CategoryRepository {
+    private static final Logger LOG = LoggerFactory.getLogger(HbmCategoryRepository.class);
     private final SessionFactory sf;
 
     private <T> T tx(Function<Session, T> command) {
@@ -34,10 +37,10 @@ public class HbmPriorityRepository implements PriorityRepository {
     }
 
     @Override
-    public List<Priority> findAll() {
+    public List<Category> findAll() {
         Session session = sf.openSession();
         try {
-            return session.createQuery("FROM Priority", Priority.class)
+            return session.createQuery("FROM Category", Category.class)
                     .getResultList();
         } finally {
             session.close();
@@ -45,12 +48,13 @@ public class HbmPriorityRepository implements PriorityRepository {
     }
 
     @Override
-    public Priority findById(Integer id) {
+    public Optional<Category> findById(Integer id) {
         Session session = sf.openSession();
         try {
-            return session.createQuery("FROM Priority WHERE id = :fId", Priority.class)
+            return Optional.ofNullable(session.createQuery(
+                            "FROM Category WHERE id = :fId", Category.class)
                     .setParameter("fId", id)
-                    .uniqueResult();
+                    .uniqueResult());
         } finally {
             session.close();
         }

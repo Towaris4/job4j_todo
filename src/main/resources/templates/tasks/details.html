@@ -7,11 +7,32 @@
 <body class="container mt-5">
 <h1>Детали задачи #<span th:text="${task.id}"></span></h1>
 <div class="card p-4 mt-3">
-    <p><strong>Тема:</strong> <span th:text="${task.title}"></span></p>
-    <p><strong>Приоритет:</strong> <span th:text="${task.priority.getName()}"></span></p>
-    <p><strong>Описание:</strong> <span th:text="${task.description}"></span></p>
-    <p><strong>Создана:</strong> <span th:text="${#temporals.format(task.created, 'dd.MM.yyyy HH:mm')}"></span></p>
-    <p><strong>Статус:</strong> <span class="fw-bold" th:text="${task.done} ? 'Выполнено' : 'В работе'"></span></p>
+<p><strong>Тема:</strong> <span th:text="${task.title} ?: 'Без названия'"></span></p>
+
+<!-- Безопасное обращение к priority -->
+<p><strong>Приоритет:</strong>
+    <span th:text="${task.priority?.name} ?: 'Не указан'"></span>
+</p>
+
+<!-- Безопасная работа с коллекцией категорий -->
+<p><strong>Категории:</strong>
+    <span th:each="cat : ${task.categories ?: T(java.util.Collections).emptyList()}"
+          th:text="${cat.name}"
+          class="badge bg-primary me-1 mb-1"></span>
+    <span th:if="${task.categories == null or #lists.isEmpty(task.categories)}"
+          class="text-muted fst-italic">Категории не выбраны</span>
+</p>
+
+<p><strong>Описание:</strong> <span th:text="${task.description} ?: '—'"></span></p>
+
+<!-- Безопасное форматирование даты -->
+<p><strong>Создана:</strong>
+    <span th:text="${task.created != null ? #temporals.format(task.created, 'dd.MM.yyyy HH:mm') : 'Дата не указана'}"></span>
+</p>
+
+<p><strong>Состояние:</strong>
+    <span class="fw-bold" th:text="${task.done} ? 'Выполнено' : 'В работе'"></span>
+</p>
 </div>
 
 <!-- 5. Кнопки действий -->

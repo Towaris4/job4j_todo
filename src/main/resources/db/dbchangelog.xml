@@ -9,4 +9,7 @@
     <include file="scripts/004_ddl_add_user_id_to_tasks.sql" relativeToChangelogFile="true"/>
     <include file="scripts/005_ddl_add_column_user_id_to_tasks.sql" relativeToChangelogFile="true"/>
     <include file="scripts/006_ddl_create_initial_priorities.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/007_ddl_create_categories_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/008_ddl_create_task_categories_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/009_ddl_insert_categories.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

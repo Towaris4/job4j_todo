@@ -21,4 +21,9 @@ public class SimplePriorityService implements PriorityService {
     public List<Priority> findAll() {
         return priorityRepository.findAll();
     }
+
+    @Override
+    public Priority findById(Integer id) {
+        return priorityRepository.findById(id);
+    }
 }

@@ -6,17 +6,22 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import ru.job4j.todo.model.Priority;
+import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.TaskCategory;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Repository
 @AllArgsConstructor
-public class HbmPriorityRepository implements PriorityRepository {
-    private static final Logger LOG = LoggerFactory.getLogger(HbmPriorityRepository.class);
+public class HbmTaskCategoryRepository implements TaskCategoryRepository {
+    private static final Logger LOG = LoggerFactory.getLogger(HbmTaskCategoryRepository.class);
     private final SessionFactory sf;
 
+    /**
+     * Централизованная обработка сессии, транзакции и исключений.
+     * Логгирует ошибку, откатывает транзакцию.
+     */
     private <T> T tx(Function<Session, T> command) {
         Session session = sf.openSession();
         try {
@@ -34,25 +39,10 @@ public class HbmPriorityRepository implements PriorityRepository {
     }
 
     @Override
-    public List<Priority> findAll() {
-        Session session = sf.openSession();
-        try {
-            return session.createQuery("FROM Priority", Priority.class)
-                    .getResultList();
-        } finally {
-            session.close();
-        }
-    }
-
-    @Override
-    public Priority findById(Integer id) {
-        Session session = sf.openSession();
-        try {
-            return session.createQuery("FROM Priority WHERE id = :fId", Priority.class)
-                    .setParameter("fId", id)
-                    .uniqueResult();
-        } finally {
-            session.close();
-        }
+    public Optional<TaskCategory> create(TaskCategory taskCategory) {
+        return tx(session -> {
+            session.save(taskCategory);
+            return Optional.of(taskCategory);
+        });
     }
 }

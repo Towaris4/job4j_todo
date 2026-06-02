@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PriorityRepository {
     List<Priority> findAll();
+
+    Priority findById(Integer id);
 }
